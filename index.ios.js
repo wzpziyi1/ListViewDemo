@@ -12,81 +12,74 @@ import {
   View,
   ListView,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  Platform
 } from 'react-native';
 
+var liveList = require('./Res/live.json');
 var screenW = Dimensions.get('window').width;
 
 export default class ListViewDemo extends Component {
 
+
   constructor(props) {
     super(props);
 
-    var ds = new ListView.DataSource({
-      rowHasChanged: (r1,r2)=>{
-        r1 != r2
-      },
+    let ds = new ListView.DataSource({
+      rowHasChanged: (r1,r2)=>{r1 != r2},
     });
 
     this.state = {
-      ds: ds.cloneWithRows(['row1', 'row2']),
-    }
+      dataSource: ds.cloneWithRows(liveList),
+    };
 
   }
 
   render() {
 
     return (
-        <ListView dataSource={this.state.ds}
+
+        <ListView dataSource={this.state.dataSource}
                   renderRow={this._renderRow.bind(this)}
-                  renderFooter={this._renderFooter.bind(this)}
-                  renderHeader={this._renderHeader.bind(this)}
-                  onScroll={this._onScroll.bind(this)}
-        >
-
-        </ListView>
+                  style={{marginTop: Platform == 'ios' ? 20 : 0}}
+        />
     )
-  }
-
-  componentDidMount() {
 
   }
 
-  //ListView相关方法
+  //ListView Method
   _renderRow(rowData, sectionId, rowId, highlightRow) {
     return (
-        <TouchableOpacity>
-          <View style={{
-            height:44,
-            justifyContent:'center',
-            backgroundColor:'green',
-            borderBottomWidth:1,
-            borderBottomColor:'#e8e8e8'
-          }} onPress={()=>{
-
-          }}>
-            <Text>{rowData}</Text>
+        <View>
+          <View style={styles.topViewStyle}>
+            <Image source={{uri:rowData.creator.portrait}} style={{width:35,height:35,marginLeft:10}}></Image>
+            <View style={{marginLeft:10,justifyContent:'space-between',height:35}}>
+              <Text style={styles.nameStyle}>{rowData.creator.nick}</Text>
+              <Text style={styles.nameStyle}>{rowData.city}</Text>
+            </View>
+            <Text style={{position:'absolute',right:0,color:'red'}}>{rowData.online_users}
+              <Text style={{color:'black'}}>人在看</Text>
+            </Text>
           </View>
-        </TouchableOpacity>
+          <Image source={{uri:rowData.creator.portrait}} style={{height:300,width:screenW}}/>
+        </View>
     )
   }
 
-  _renderHeader(){
-    return ( <View style={{backgroundColor:'blue',height:300}}></View>)
-  }
-
-  _renderFooter(){
-    return (<View style={{backgroundColor:'yellow',height:200}}></View>)
-  }
-
-  _onScroll(e) {
-    console.log(e.nativeEvent.contentSize);
-  }
 
 }
 
 const styles = StyleSheet.create({
-
+  topViewStyle:{
+    height:50,
+    width:screenW,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  nameStyle:{
+    fontSize:13
+  }
 });
 
 AppRegistry.registerComponent('ListViewDemo', () => ListViewDemo);
