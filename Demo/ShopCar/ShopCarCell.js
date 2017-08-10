@@ -98,8 +98,6 @@ export default class ShopCarCell extends Component {
 
 }
 
-
-
 var styles = StyleSheet.create({
   contentStyle: {
     backgroundColor: 'white',
