@@ -77,7 +77,7 @@ export default class ListViewDemo extends Component {
   }
 
 
-    _renderSectionHeader(sectionData, sectionID) {
+  _renderSectionHeader(sectionData, sectionID) {
     return (
         <View style={{backgroundColor:'#e8e8e8'}}>
           <Text style={{fontSize:20}}>{sectionID}</Text>
